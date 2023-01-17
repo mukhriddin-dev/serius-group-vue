@@ -1,61 +1,80 @@
 <template>
-  <header class="bg-success">
+  <Header />
+  <main>
+    <Counter
+      :number="num"
+      @add="dicrement"
+      @minus="increment"
+      @zero="resetCount"
+    />
+
     <div class="container">
-      <nav class="nav bg-success text-white d-flex justify-content-between">
-        <h3 class="nav__logo">VUE.JS</h3>
-        <ul class="nav__list d-flex justify-content-between w-25 list-unstyled">
-          <li class="nav__list--item">
-            <a href="#" class="nav__ul--list-link">Home</a>
-          </li>
-          <li class="nav__list--item">
-            <a href="#" class="nav__ul--list-link">About</a>
-          </li>
-          <li class="nav__list--item">
-            <a href="#" class="nav__ul--list-link">Contact</a>
-          </li>
-          <li class="nav__list--item">
-            <a href="#" class="nav__ul--list-link">Service</a>
+      <div class="card p-4 mx-auto mt-5 shadow">
+        <form action="#">
+          <label for="title" class="w-75 mx-auto d-block mb-3">
+            <p>Enter task title</p>
+            <input
+              type="text"
+              class="form-control p-3"
+              id="title"
+              placeholder="Enter task title"
+              @input="title=$event.target.value"
+              v-bind:value="title"
+            />
+          </label>
+
+          <label for="title" class="w-75 mx-auto d-block">
+            <p>Enter task deadline</p>
+            <input
+              type="date"
+              class="form-control p-3"
+              id="title"
+              placeholder="Enter task title"
+              @input="date=$event.target.value"
+              v-bind:value="date"
+            />
+          </label>
+
+          <button class="btn btn-success mx-auto mt-3 d-block w-75" @click="addtask">
+            add task
+          </button>
+        </form>
+      </div>
+
+      <div class="card p-4 mx-auto mt-5 shadow">
+        <ul class="list-group">
+          <li class="list-group-item" v-for="item in task">
+            {{ item.id }} . {{ item.title }} {{ item.date }}
           </li>
         </ul>
-      </nav>
-    </div>
-  </header>
-  <!-- header end -->
-
-  <main>
-    <div class="container">
-      <!-- main content -->
-
-      <div class="card w-75 mx-auto p-5 shadow mt-5">
-        <h1 class="text-center">{{ num }}</h1>
-        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <button type="button" class="btn btn-danger" v-on:click="dicrement">
-            DICREMENT
-          </button>
-          <button type="button" class="btn btn-success" v-on:click="increment">
-            INCREMENT
-          </button>
-          <button type="button" class="btn btn-warning" v-on:click="resetCount">
-            RESET
-          </button>
-        </div>
       </div>
     </div>
   </main>
-
-  <footer class="p-3 text-center text-white bg-success">
-    <div class="container">
-      <p>{{ new Date().getFullYear() }} Vue.js</p>
-    </div>
-  </footer>
+  <Footer />
 </template>
 
 <script>
+import Header from "./components/Header/Header.vue";
+import Counter from "./components/Counter/Counter.vue";
+import Footer from "./components/Footer/Footer.vue";
+
 export default {
+  components: {
+    Header,
+    Counter,
+    Footer,
+  },
+
   data() {
     return {
       num: 0,
       str: "Vue.js",
+      task: [
+        { id: 1, title: "lorem ipsum dolor set amet ", date: "2023-01-30" },
+        { id: 2, title: "lorem ipsum dolor set amet ", date: "2023-01-31" },
+      ],
+      title: "",
+      date: "",
     };
   },
 
@@ -68,6 +87,19 @@ export default {
     },
     resetCount() {
       this.num = 0;
+    },
+    addtask() {
+
+      const newTask = {
+        id: Date.now(),
+        title: this.title,
+        date: this.date,
+      };
+
+      this.task.push(newTask);
+
+      this.title=""
+      this.date=""
     },
   },
 };
